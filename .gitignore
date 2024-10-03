@@ -35,7 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
-
+build.gradle
+gradlew
+gradlew.bat
+settings.gradle
 # Created by https://www.toptal.com/developers/gitignore/api/java,intellij,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,intellij,gradle
 
