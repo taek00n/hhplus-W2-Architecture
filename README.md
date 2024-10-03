@@ -1,4 +1,6 @@
-# 제목 없음
+# 항플 2주차
+
+![erd](./erd.png)
 
 ### Lecture Table
 
@@ -38,6 +40,13 @@ CREATE TABLE MEMBER (
         ADD CONSTRAINT fk_member_lectuer_id
         FOREIGN KEY(LECTURE_ID)
         REFERENCES MEMBER(LECTURE_ID);
+        ```
+        
+    - 수강생이 정상적으로 특강을 신청 성공하게 되면 해당 테이블에 차곡차곡 쌓이게 됩니다.
+        ALTER TABLE MEMEBER
+        ADD CONSTRAINT fk_member_lectuer_id
+        FOREIGN KEY(LECTURE_ID)
+        REFERENCES LECTURE(LECTURE_ID);
         ```
         
     - 수강생이 정상적으로 특강을 신청 성공하게 되면 해당 테이블에 차곡차곡 쌓이게 됩니다.

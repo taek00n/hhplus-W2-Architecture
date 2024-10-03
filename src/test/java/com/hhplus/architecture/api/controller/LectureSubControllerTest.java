@@ -10,4 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @WebMvcTest(LectureSubController.class)
 class LectureSubControllerTest {
 
+    @MockBean
+    private LectureService lectureService;
+
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private LectureRepository lectureRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 }

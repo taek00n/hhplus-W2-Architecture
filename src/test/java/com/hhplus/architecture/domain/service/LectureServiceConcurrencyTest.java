@@ -44,6 +44,7 @@ public class LectureServiceConcurrencyTest {
         AtomicInteger failCount = new AtomicInteger(0);
 
         int threads = 40;
+
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
         CountDownLatch countDownLatch = new CountDownLatch(threads);
 
