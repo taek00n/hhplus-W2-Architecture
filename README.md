@@ -1,4 +1,6 @@
-# 제목 없음
+# 항플 2주차
+
+![erd](./erd.png)
 
 ### Lecture Table
 
