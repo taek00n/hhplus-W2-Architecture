@@ -34,22 +34,17 @@ public class LectureServiceConcurrencyTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @BeforeEach
-    void setUp() {
-        Lecture lecture = new Lecture(1L, "Tdd", "20241010");
-        when(lectureRepository.findByLectureId(1L)).thenReturn(lecture);
-    }
-
     @Test
     @DisplayName("한_특강에_40명_신청시_30명만_성공")
-    void subLecture() throws Exception {
+    void subLectureOverCap() throws Exception {
         //given
         final Long lectureId = 1L;
 
         AtomicInteger successCount = new AtomicInteger(0);
         AtomicInteger failCount = new AtomicInteger(0);
 
-        int threads = 1;
+        int threads = 40;
+
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
         CountDownLatch countDownLatch = new CountDownLatch(threads);
 
@@ -74,6 +69,43 @@ public class LectureServiceConcurrencyTest {
         Thread.sleep(1000);
         assertThat(successCount.get()).isEqualTo(30);
         assertThat(failCount.get()).isEqualTo(10);
+        lectureRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("특강을_5번_신청했을때_한번만_성공")
+    void subLectureSameMember() throws Exception {
+        //given
+        final Long lectureId = 1L;
+
+        AtomicInteger successCount = new AtomicInteger(0);
+        AtomicInteger failCount = new AtomicInteger(0);
+
+        int threads = 5;
+        ExecutorService executorService = Executors.newFixedThreadPool(threads);
+        CountDownLatch countDownLatch = new CountDownLatch(threads);
+
+        //when
+        for (int i = 0; i < threads; i++) {
+            Long memberId = (long) i;
+            executorService.submit(() -> {
+                try {
+                    lectureService.subLecture(memberId, lectureId);
+                    successCount.incrementAndGet();
+                } catch (IllegalArgumentException e) {
+                    failCount.incrementAndGet();
+                } finally {
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        countDownLatch.await();
+        executorService.shutdown();
+
+        //then
+        Thread.sleep(1000);
+        assertThat(successCount.get()).isEqualTo(1);
+        assertThat(failCount.get()).isEqualTo(4);
         lectureRepository.deleteAll();
     }
 }

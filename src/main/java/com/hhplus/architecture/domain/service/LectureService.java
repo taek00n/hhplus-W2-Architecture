@@ -81,19 +81,24 @@ public class LectureService {
      * 정원이 초과되면 마감
      */
     @Transactional
-    public void subLecture(Long memberId, Long lectureId) {
+    public Member subLecture(Long memberId, Long lectureId) {
 
         Lecture lecture = lectureRepository.findByLectureId(lectureId);
-        System.out.println("service lecture >> " + lecture);
 
         if (lecture.getCapacity() <= 0) {
             throw new IllegalArgumentException("해당 특강은 인원이 다 찼습니다.");
         }
 
+        boolean chkDup = this.checkDuplication(memberId, lecture);
+        if (chkDup) {
+            throw new IllegalArgumentException("이미 신청한 특강입니다.");
+        }
+
         lecture.reduceCapacity();
         Member member = new Member(memberId, lecture);
-        System.out.println("service member >> " + member.toString());
-        memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
+
+        return saveMember;
     }
 
     /**
