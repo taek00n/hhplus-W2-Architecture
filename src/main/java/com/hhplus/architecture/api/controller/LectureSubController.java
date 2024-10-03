@@ -39,21 +39,21 @@ public class LectureSubController {
         return responseDtoList;
     }
 
-//    @PostMapping("/subLecture")
-//    public ResponseDTO subLecture(@RequestBody RequestDTO requestDTO) {
-//        lectureService.subLecture(requestDTO.getMemberId(), requestDTO.getLectureId());
-//        ResponseDTO responseDTO = new ResponseDTO();
-//
-//        if (member != null) {
-//            Lecture lecture = lectureService.findByLectureId(member.getLecture().getLectureId());
-//            responseDTO = ResponseDTO.builder()
-//                    .lectureName(lecture.getLectureName())
-//                    .memberId(member.getMemberId())
-//                    .build();
-//        }
-//
-//        return responseDTO;
-//    }
+    @PostMapping("/subLecture")
+    public ResponseDTO subLecture(@RequestBody RequestDTO requestDTO) {
+        Member member = lectureService.subLecture(requestDTO.getMemberId(), requestDTO.getLectureId());
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        if (member != null) {
+            Lecture lecture = lectureService.findByLectureId(member.getLecture().getLectureId());
+            responseDTO = ResponseDTO.builder()
+                    .lectureName(lecture.getLectureName())
+                    .memberId(member.getMemberId())
+                    .build();
+        }
+
+        return responseDTO;
+    }
 
     @PostMapping("/subLectureList/{memberId}")
     public List<ResponseDTO> subLectureList(@PathVariable Long memberId) {
