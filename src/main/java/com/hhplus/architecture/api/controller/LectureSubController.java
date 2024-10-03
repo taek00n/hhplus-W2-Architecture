@@ -39,19 +39,37 @@ public class LectureSubController {
         return responseDtoList;
     }
 
-    @PostMapping("/subLecture")
-    public ResponseDTO subLecture(@RequestBody RequestDTO requestDTO) {
-        Member member = lectureService.subLecture(requestDTO.getMemberId(), requestDTO.getLectureId());
-        ResponseDTO responseDTO = new ResponseDTO();
+//    @PostMapping("/subLecture")
+//    public ResponseDTO subLecture(@RequestBody RequestDTO requestDTO) {
+//        lectureService.subLecture(requestDTO.getMemberId(), requestDTO.getLectureId());
+//        ResponseDTO responseDTO = new ResponseDTO();
+//
+//        if (member != null) {
+//            Lecture lecture = lectureService.findByLectureId(member.getLecture().getLectureId());
+//            responseDTO = ResponseDTO.builder()
+//                    .lectureName(lecture.getLectureName())
+//                    .memberId(member.getMemberId())
+//                    .build();
+//        }
+//
+//        return responseDTO;
+//    }
 
-        if (member != null) {
-            Lecture lecture = lectureService.findByLectureId(member.getLecture().getLectureId());
-            responseDTO = ResponseDTO.builder()
+    @PostMapping("/subLectureList/{memberId}")
+    public List<ResponseDTO> subLectureList(@PathVariable Long memberId) {
+
+        List<Lecture> subLecturesByMemberId = lectureService.getSubLecturesByMemberId(memberId);
+        List<ResponseDTO> responseDtoList = new ArrayList<>();
+
+        for (Lecture lecture : subLecturesByMemberId) {
+            ResponseDTO responseDTO = ResponseDTO.builder()
                     .lectureName(lecture.getLectureName())
-                    .memberId(member.getMemberId())
+                    .lectureDate(lecture.getLectureDate())
                     .build();
+
+            responseDtoList.add(responseDTO);
         }
 
-        return responseDTO;
+        return responseDtoList;
     }
 }
